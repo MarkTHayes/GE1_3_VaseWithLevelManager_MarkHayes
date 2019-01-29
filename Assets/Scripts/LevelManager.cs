@@ -15,10 +15,17 @@ public class LevelManager : MonoBehaviour {
 
 	// The SwitchController
 	public SwitchController theSwitch;
+    public bool enableSwitch;
+
+
+    public Rigidbody2D theVase;
+
+    public Vector2 pushVaseForce;
 
     private void Awake()
     {
         instance = this;
+        enableSwitch = false;
     }
     // Use this for initialization
     void Start () {
@@ -35,18 +42,33 @@ public class LevelManager : MonoBehaviour {
     // goes into this function that will (a) if the switch is enabled will turn it on if it is off and
     // push the Vase off the ledge and (b) if the switch is enabled will turn it off if it is on.
 	public void flipTheSwitch() {
-		
-	}
+
+        if (theSwitch.switchAnimator.GetBool("SwitchOff") == true && enableSwitch )
+        {
+            theSwitch.switchAnimator.SetBool("SwitchOff", false);
+            theVase.AddForce(pushVaseForce, ForceMode2D.Impulse);
+
+        }
+        else if(theSwitch.switchAnimator.GetBool("SwitchOff") == false && enableSwitch)
+        {
+            theSwitch.switchAnimator.SetBool("SwitchOff", true);          
+
+        }
+
+
+    }
 
     // The following two functions get called by the SwitchController object when the Hero enters the 
     // trigger box of the Switch. You need to write the code that goes into these functions.
     public void onSwitchTriggerEnter(Collider2D other)
     {
+        enableSwitch = true;
+
 
     }
 
     public void onSwitchTriggerExit(Collider2D other)
     {
-        
+        enableSwitch = false;
     }
 }
