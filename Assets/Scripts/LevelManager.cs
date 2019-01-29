@@ -22,18 +22,30 @@ public class LevelManager : MonoBehaviour {
 
     public Vector2 pushVaseForce;
 
+
+    private float fiveSecondTimer;
+    public bool waitForTimer;
+
     private void Awake()
     {
         instance = this;
         enableSwitch = false;
+        waitForTimer = false;
     }
     // Use this for initialization
     void Start () {
+
+        fiveSecondTimer = Time.time + 5;
 	
 	}
 	
 	// Update is called once per frame
 	void Update () {
+
+        if (Time.time > fiveSecondTimer )
+        {
+            waitForTimer = true;
+        }
 	
 	}
 
@@ -43,13 +55,13 @@ public class LevelManager : MonoBehaviour {
     // push the Vase off the ledge and (b) if the switch is enabled will turn it off if it is on.
 	public void flipTheSwitch() {
 
-        if (theSwitch.switchAnimator.GetBool("SwitchOff") == true && enableSwitch )
+        if (theSwitch.switchAnimator.GetBool("SwitchOff") == true && enableSwitch && waitForTimer )
         {
             theSwitch.switchAnimator.SetBool("SwitchOff", false);
             theVase.AddForce(pushVaseForce, ForceMode2D.Impulse);
 
         }
-        else if(theSwitch.switchAnimator.GetBool("SwitchOff") == false && enableSwitch)
+        else if(theSwitch.switchAnimator.GetBool("SwitchOff") == false && enableSwitch && waitForTimer)
         {
             theSwitch.switchAnimator.SetBool("SwitchOff", true);          
 
